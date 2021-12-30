@@ -1,7 +1,19 @@
 #include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+enum states {
+  not_num,
+  is_num,
+  is_sign
+};
+
+int space(int c) {
+  return c == ' ' || c == '\n' || c == '\t' || c == EOF || c == ',';
+}
 
 void printValue(int v) {
+  v = abs(v);
   if (v == 17) {
     printf("Seventeen\n");
     return;
@@ -50,17 +62,39 @@ int checkNum(int n) {
   return 1;
 }
 
+void build_int(int *p_int, int c) {
+  (*p_int) = (*p_int) * 10 + (c - '0');
+}
+
 int main() {
-  int n = 0;
-  printf("Type -1 to exit\n\n");
-  while (1) {
-    scanf("%d", &n);
-    if (n == -1)
-      break;
-    if (checkNum(n))
-      printValue(abs(n));
+  int c;
+  enum states state;
+  int num = 0;
+
+  do {
+    c = getchar();
+    if (space(c))
+      state = not_num;
+    else if (isdigit(c))
+      state = is_num;
+    else if (c == '+' || c == '-')
+      state = is_sign;
     else
-      printf("Wrong value, try again:\n\n");
-  }
+      state = not_num;
+
+    switch (state) {
+      case not_num: {
+        if (num && checkNum(num))
+          printValue(num);
+        num = 0;
+        break;
+      }
+      case is_num: {
+        build_int(&num, c);
+        break;
+      }
+      default: { break; }
+    }
+  } while (c != EOF);
   return 0;
 }

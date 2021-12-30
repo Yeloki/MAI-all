@@ -7,35 +7,33 @@ void scanM(int n, int m[n][n]) {
 }
 
 void printM(int n, int m[n][n]) {
-  int x = 0, y = 0, d = 0;
-  int max_x = n - 1, max_y = n - 1, min_x = 0, min_y = 1;
-  int st = 0;
-  while (d < n * n) {
+  int x = 0, y = n - 1;
+  int state = 2;
+  for (int i = 0; i < n * n; ++i) {
     printf("%d ", m[y][x]);
-    switch (st) {
-      case 0:++x;
-        break;
-      case 1:++y;
-        break;
-      case 2:--x;
-        break;
-      case 3:--y;
-        break;
+    if (state == 1) {
+      if (x == n - 1) {
+        --y;
+        state = 2;
+      } else if (y == n - 1) {
+        ++x;
+        state = 2;
+      } else {
+        ++x;
+        ++y;
+      }
+    } else {
+      if (y == 0) {
+        state = 1;
+        ++x;
+      } else if (x == 0) {
+        --y;
+        state = 1;
+      } else {
+        --x;
+        --y;
+      }
     }
-    if (x == max_x && st == 0) {
-      st = 1;
-      --max_x;
-    } else if (y == max_y && st == 1) {
-      st = 2;
-      --max_y;
-    } else if (x == min_x && st == 2) {
-      st = 3;
-      ++min_x;
-    } else if (y == min_y && st == 3) {
-      st = 0;
-      ++min_y;
-    }
-    ++d;
   }
 }
 

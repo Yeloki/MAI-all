@@ -1,44 +1,30 @@
 #include <stdio.h>
+#include <ctype.h>
+#define VOWELS (1u<<('a' - 'a') | 1u <<('e'-'a') | 1u <<('i'-'a') | 1u <<('o'-'a') | 1u <<('u'-'a') | 1u <<('y'-'a'))
 
-int is_vowel(char c) {
-  for (int i = 0; i < 12; ++i)
-    if ("aAeEiIoOuUyY"[i] == c)
-      return 1;
-  return 0;
-}
-
-int get_vowel_from_0(char c) {
-  for (int i = 0; i < 12; ++i)
-    if ("aeiouyAEIOUY"[i] == c)
-      return i % 6;
-  return -1;
-}
-
-int is_char(char c) {
-  return 65 <= c && c <= 90 || 97 <= c && c <= 122;
+unsigned int to_set(char c) {
+  c = (char) tolower(c);
+  return ('a' <= c && c <= 'z') ? (1u << (c - 'a')) : 0;
 }
 
 int main() {
-  int v[6] = {0, 0, 0, 0, 0, 0};
+//  int v[6] = {0, 0, 0, 0, 0, 0};
+  unsigned int v = 0;
   char c;
-  int cntr = 0;
-  while ((c = getchar()) != EOF || c == '-') {
-    if (!is_char(c)) {
-      int flag = 0;
-      for (int i = 0; i < 6; ++i) {
-        if (v[i] >= 1) {
-          ++flag;
-        }
-        v[i] = 0;
-      }
-      if (flag == 1)
-        ++cntr;
+  int result = 0;
+  while (scanf("%c", &c) != EOF) {
+    if (isspace(c)) {
+      int counter = 0;
+      v = v & VOWELS;
+      for (char x = 'a'; x <= 'z'; ++x)
+        if ((v & to_set(x)) != 0)
+          ++counter;
+      result += ((counter == 1) ? 1 : 0);
     } else {
-      if (is_vowel(c))
-        ++v[get_vowel_from_0(c)];
+      v |= to_set(c);
     }
   }
-  printf(cntr ? "YES" : "NO");
+  printf(result ? "YES" : "NO");
 
   return 0;
 }
