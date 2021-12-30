@@ -3,10 +3,8 @@
 #include <ctype.h>
 
 enum states {
-  not_num,
-  is_num,
-  is_sign,
-  next
+  yes,
+  no
 };
 
 int space(int c) {
@@ -69,43 +67,36 @@ void build_int(int *p_int, int c) {
 
 int main() {
   int c;
-  enum states state;
+  enum states state = yes;
   int num = 0;
   int sign = 0;
   do {
     c = getchar();
-    if (space(c))
-      state = next;
-    else if (isdigit(c))
-      state = is_num;
-    else if (c == '+' || c == '-')
-      state = is_sign;
-    else
-      state = not_num;
-
     switch (state) {
-      case not_num: {
-        num = 0;
+      case yes: {
+        if (space(c)) {
+          if (num && checkNum(num) && sign < 2)
+            printValue(num);
+          state = yes;
+          num = 0, sign = 0;
+        } else if ((isdigit(c) || c == '+' || c == '-') && sign < 2) {
+          state = yes;
+          if (isdigit(c))
+            build_int(&num, c);
+        } else {
+          state = no;
+        }
+        break;
+      }
+      case no: {
         sign = 0;
-        break;
-      }
-      case next: {
-        if (num && checkNum(num) && sign < 2)
-          printValue(num);
         num = 0;
-        sign = 0;
+        if (space(c))
+          state = yes;
         break;
       }
-      case is_num: {
-        build_int(&num, c);
-        break;
-      }
-      case is_sign: {
-        ++sign;
-        break;
-      }
-      default:break;
     }
+
   } while (c != EOF);
   return 0;
 }
