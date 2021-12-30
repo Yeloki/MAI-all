@@ -83,6 +83,8 @@ int main() {
           state = yes;
           if (isdigit(c))
             build_int(&num, c);
+          else
+            ++sign;
         } else {
           state = no;
         }
