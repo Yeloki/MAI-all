@@ -5,7 +5,8 @@
 enum states {
   not_num,
   is_num,
-  is_sign
+  is_sign,
+  next
 };
 
 int space(int c) {
@@ -70,11 +71,11 @@ int main() {
   int c;
   enum states state;
   int num = 0;
-
+  int sign = 0;
   do {
     c = getchar();
     if (space(c))
-      state = not_num;
+      state = next;
     else if (isdigit(c))
       state = is_num;
     else if (c == '+' || c == '-')
@@ -84,16 +85,26 @@ int main() {
 
     switch (state) {
       case not_num: {
-        if (num && checkNum(num))
+        num = 0;
+        sign = 0;
+        break;
+      }
+      case next: {
+        if (num && checkNum(num) && sign < 2)
           printValue(num);
         num = 0;
+        sign = 0;
         break;
       }
       case is_num: {
         build_int(&num, c);
         break;
       }
-      default: { break; }
+      case is_sign: {
+        ++sign;
+        break;
+      }
+      default:break;
     }
   } while (c != EOF);
   return 0;
