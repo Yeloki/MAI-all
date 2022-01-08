@@ -11,7 +11,7 @@ double func(double x) {
 }
 
 int main() {
-  double e = 1;
+  float e = 1;
   while (e / 2 + 1 > 1) {
     e /= 2;
   }
