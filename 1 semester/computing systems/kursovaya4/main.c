@@ -2,21 +2,24 @@
 #include <math.h>
 
 double func1(double x) {
-  return sqrt(1 - x) - tan(x);
+  return x * x - log(1 + x) - 3;
 }
+
 double func2(double x) {
-  return 3 * x - 14 + exp(x) - exp(-x);
+  return 2 * x * sin(x) - cos(x);
 }
-struct tip {
+
+struct fun_result {
   int i;
   double r;
   int c;
 };
-//изменненая функция для метода итераций
+
+// changed fun for iteration method
 double g(double f(double), double x, double h) {
   return x - h * f(x);
 }
-//машинное эпсилон
+
 double eps() {
   double x = 1;
   while (x / 2 + 1 > 1) {
@@ -25,21 +28,23 @@ double eps() {
   return x;
 }
 double e;
-//первая производная функции
+
+//first der
 double derivative11(double f(double), double x) {
   return (f(x + 0.01) - f(x - 0.01)) / (0.02);
 }
-//вторая производная функции
+
+//second der
 double derivative12(double f(double), double x) {
   return (f(x + 0.01) - 2 * f(x) + f(x - 0.01)) / (0.0001);
 }
 
-//максимальное значение производной функции на заданном отрезке [a,b]
+//max val of der on [a,b]
 double max_derivative(double f(double), double a, double b) {
   return fmax(fmax(derivative11(f, a), derivative11(f, b)), derivative11(f, (a + b) / 2));
 }
-//метод дихотомии
-struct tip dihotomia(double f(double), double a, double b) {
+
+struct fun_result dihotomia(double f(double), double a, double b) {
   //double e=eps();
   int s = 0;
   while ((fabs(a - b) >= e * 10000) && (s < 100)) {
@@ -50,11 +55,11 @@ struct tip dihotomia(double f(double), double a, double b) {
     }
     s++;
   }
-  struct tip r = {s, (a + b) / 2, 1};
+  struct fun_result r = {s, (a + b) / 2, 1};
   return r;
 }
-//метод ньютона
-struct tip newton(double f(double), double a, double b) {
+
+struct fun_result newton(double f(double), double a, double b) {
   int s = 0, o = 1;
   //double e=eps();
   double x0 = (a + b) / 2, x1 = x0 - (f(x0) / derivative11(f, x0));
@@ -68,11 +73,12 @@ struct tip newton(double f(double), double a, double b) {
       s++;
     }
   }
-  struct tip r = {s, x1, o};
+  struct fun_result r = {s, x1, o};
   return r;
 }
+
 //метод итераций
-struct tip iteration(double f(double), double a, double b) {
+struct fun_result iteration(double f(double), double a, double b) {
   int s = 0, o = 1;
   //double e=eps();
   double h = 1 / max_derivative(f, a, b);
@@ -89,45 +95,49 @@ struct tip iteration(double f(double), double a, double b) {
       s++;
     }
   }
-  struct tip r = {s, x1, o};
+  struct fun_result r = {s, x1, o};
   return r;
 }
+
 int main() {
   e = eps();
-  struct tip r = dihotomia(func2, 1, 3), a = newton(func2, 1, 3), b = iteration(func2, 1, 3);
-  printf("------------------------------------------------------------------------\n");
+  double a1 = 2, b1 = 3, a2 = 0.4, b2 = 1;
+  struct fun_result d = dihotomia(func1, a1, b1), n = newton(func1, a1, b1), i = iteration(func1, a1, b1);
+  printf("/----------------------------------------------------------------------\\\n");
   printf("|  Function    |     Dihotomia   |      Newton    |      Iteration     |\n");
-  printf("------------------------------------------------------------------------\n");
+  printf("|--------------|-----------------|----------------|--------------------|\n");
   printf("|      1       |   ");
-  if (r.c)
-    printf("%.4lf (%d)   |", r.r, r.i);
+  if (d.c)
+    printf("%.4lf (%d)   |", d.r, d.i);
   else
-    printf("  Ne shoditsya  |");
-  if (a.c)
-    printf("  %.4lf (%d)    |", a.r, a.i);
+    printf("Doesn't converge|");
+  if (n.c)
+    printf("  %.4lf (%d)    |", n.r, n.i);
   else
-    printf("  Ne shoditsya  |");
-  if (b.c)
-    printf("     %.4lf (%d)    |\n", b.r, b.i);
+    printf("Doesn't converge|");
+  if (i.c)
+    printf("     %.4lf (%d)    |\n", i.r, i.i);
   else
-    printf("    Ne shoditsya    |\n");
-  printf("------------------------------------------------------------------------\n");
-  r = dihotomia(func1, 0, 1), a = newton(func1, 0, 1), b = iteration(func1, 0, 1);
+    printf("  Doesn't converge  |\n");
+  printf("|--------------|-----------------|----------------|--------------------|\n");
+  d = dihotomia(func2, a2, b2);
+  n = newton(func2, a2, b2);
+  i = iteration(func2, a2, b2);
   printf("|      2       |   ");
-  if (r.c)
-    printf("%.4lf (%d)   |", r.r, r.i);
+  if (d.c)
+    printf("%.4lf (%d)   |", d.r, d.i);
   else
-    printf("  Ne shoditsya  |");
-  if (a.c)
-    printf("  %.4lf (%d)    |", a.r, a.i);
+    printf(("Doesn't converge|"));
+  if (n.c)
+    printf("  %.4lf (%d)    |", n.r, n.i);
   else
-    printf(("  Ne shoditsya  |"));
-  if (b.c)
-    printf("     %.4lf (%d)    |\n", b.r, b.i);
+    printf(("Doesn't converge|"));
+  if (i.c)
+    printf("     %.4lf (%d)    |\n", i.r, i.i);
   else
-    printf(("    Ne shoditsya    |\n"));
-  //printf("|      2       |   %.4lf (%d)    |   %.4lf (%d)   |   %.4lf (%d)       |\n",r.r,r.i,a.r,a.i,b.r,b.i);
-  printf("------------------------------------------------------------------------\n");
+    printf(("  Doesn't converge  |\n"));
+  //printf("|      2       |   %.4lf (%d)    |   %.4lf (%d)   |   %.4lf (%d)       |\n",d.d,d.i,n.d,n.i,i.d,i.i);
+  printf("\\----------------------------------------------------------------------/\n");
 
   return 0;
 }
