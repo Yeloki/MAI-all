@@ -1,0 +1,181 @@
+yeloki@DESKTOP-55TUN0B:~$ cd ../../mnt/c/Users/yeloki/Documents/MAI/1\ semester/computing\ systems/10\ lab/
+yeloki@DESKTOP-55TUN0B:/mnt/c/Users/yeloki/Documents/MAI/1 semester/computing systems/10 lab$ ls         CMakeLists.txt   a.out   cmake-build-debug   converter.py   l10-2011.pdf   l10-2011VS.pdf   main.c   main.log  '~$отчет.docx'   отчет.docx
+yeloki@DESKTOP-55TUN0B:/mnt/c/Users/yeloki/Documents/MAI/1 semester/computing systems/10 lab$ gdb a.out GNU gdb (Ubuntu 9.2-0ubuntu1~20.04) 9.2
+Copyright (C) 2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from a.out...
+(gdb) h
+List of classes of commands:
+aliases -- Aliases of other commands.
+breakpoints -- Making program stop at certain points.
+data -- Examining data.
+files -- Specifying and examining files.
+internals -- Maintenance commands.
+obscure -- Obscure features.
+running -- Running the program.
+stack -- Examining the stack.
+status -- Status inquiries.
+support -- Support facilities.
+tracepoints -- Tracing of program execution without stopping the program.
+user-defined -- User-defined commands.
+Type "help" followed by a class name for a list of commands in that class.
+Type "help all" for the list of all commands.
+Type "help" followed by command name for full documentation.
+Type "apropos word" to search for commands related to "word".
+Type "apropos -v word" for full documentation of commands related to "word".
+Command name abbreviations are allowed if unambiguous.
+(gdb) list fib
+9         if (a == 1)
+10          return 1;
+11        return a * fact(a - 1);
+12      }
+13
+14      int64_t fib(int64_t c) {
+15        int64_t a = 1, b = 0;
+16        for (int64_t i = 0; i < c; ++i) {
+17          b = a + b;
+18          a = b - a;
+(gdb) list main
+27          printf("A is less than B\n");
+28        else
+29          printf("A equals B\n");
+30      }
+31
+32      int main() {
+33        for (int i = 1; i < 20; ++i)
+34          compare(fib(i), fact(i));
+35        return 0;
+36      }
+(gdb) break 34
+Breakpoint 1 at 0x1236: file main.c, line 34.
+(gdb) run
+Starting program: /mnt/c/Users/yeloki/Documents/MAI/1 semester/computing systems/10 lab/a.out
+Breakpoint 1, main () at main.c:34
+34          compare(fib(i), fact(i));
+(gdb) next
+A equals B
+33        for (int i = 1; i < 20; ++i)
+(gdb) step
+Breakpoint 1, main () at main.c:34
+34          compare(fib(i), fact(i));
+(gdb) step
+fact (a=1) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) step
+9         if (a == 1)
+(gdb) c
+Continuing.
+A is less than B
+Breakpoint 1, main () at main.c:34
+34          compare(fib(i), fact(i));
+(gdb) next
+A is less than B
+33        for (int i = 1; i < 20; ++i)
+(gdb) next
+Breakpoint 1, main () at main.c:34
+34          compare(fib(i), fact(i));
+(gdb) step
+fact (a=2) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) step
+9         if (a == 1)
+(gdb) step
+11        return a * fact(a - 1);
+(gdb) step
+fact (a=140737488347792) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) step
+9         if (a == 1)
+(gdb) step
+11        return a * fact(a - 1);
+(gdb) step
+fact (a=140737352390426) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) c
+Continuing.
+A is less than B
+Breakpoint 1, main () at main.c:34
+34          compare(fib(i), fact(i));
+(gdb) step
+fact (a=3) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) s
+9         if (a == 1)
+(gdb) s
+11        return a * fact(a - 1);
+(gdb) s
+fact (a=140737488347792) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) s
+9         if (a == 1)
+(gdb) s
+11        return a * fact(a - 1);
+(gdb) bt
+#0  fact (a=4) at main.c:11
+#1  0x0000555555555177 in fact (a=5) at main.c:11
+#2  0x0000555555555243 in main () at main.c:34
+(gdb) s
+fact (a=140737352390426) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) s
+9         if (a == 1)
+(gdb) s
+11        return a * fact(a - 1);
+(gdb) s
+fact (a=140737352441875) at main.c:8
+8       int64_t fact(int64_t a) {
+(gdb) s
+9         if (a == 1)
+(gdb) bt
+#0  fact (a=2) at main.c:9
+#1  0x0000555555555177 in fact (a=3) at main.c:11
+#2  0x0000555555555177 in fact (a=4) at main.c:11
+#3  0x0000555555555177 in fact (a=5) at main.c:11
+#4  0x0000555555555243 in main () at main.c:34
+(gdb) next
+11        return a * fact(a - 1);
+(gdb)
+12      }
+(gdb) next
+fact (a=3) at main.c:11
+11        return a * fact(a - 1);
+(gdb) bt
+#0  fact (a=3) at main.c:11
+#1  0x0000555555555177 in fact (a=4) at main.c:11
+#2  0x0000555555555177 in fact (a=5) at main.c:11
+#3  0x0000555555555243 in main () at main.c:34
+(gdb) n
+12      }
+(gdb) n
+fact (a=4) at main.c:11
+11        return a * fact(a - 1);
+(gdb) n
+12      }
+(gdb) n
+fact (a=5) at main.c:11
+11        return a * fact(a - 1);
+(gdb) n
+12      }
+(gdb) n
+A is less than B
+main () at main.c:33
+33        for (int i = 1; i < 20; ++i)
+(gdb) bt
+#0  main () at main.c:33
+(gdb) b 34
+Note: breakpoint 1 also set at pc 0x555555555236.
+Breakpoint 2 at 0x555555555236: file main.c, line 34.
+(gdb) print i
+$1 = 5
+(gdb)
