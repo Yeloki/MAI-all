@@ -1,0 +1,285 @@
+//
+//void preorderTraversal(rbtree_node *root) {
+//    if (root == NULL) return;
+//    preorderTraversal(root->left);
+//    printf("%d > ", root->val);
+//    preorderTraversal(root->right);
+//}
+//
+//rbtree_node *grandparent(rbtree_node *n) {
+//    if ((n != NULL) && (n->parent != NULL))
+//        return n->parent->parent;
+//    else
+//        return NULL;
+//}
+//
+//rbtree_node *uncle(rbtree_node *n) {
+//    rbtree_node *g = grandparent(n);
+//    if (g == NULL)
+//        return NULL; // No grandparent means no uncle
+//    if (n->parent == g->left)
+//        return g->right;
+//    else
+//        return g->left;
+//}
+//
+//tree *create_tree(int val) {
+//    tree *new_tree = malloc(sizeof(tree));
+//    rbtree_node *new = malloc(sizeof(rbtree_node));
+//    new_tree->root = new;
+//    new->val = val;
+//    new->left = NULL;
+//    new->right = NULL;
+//    new->parent = NULL;
+//    new->color = BLACK;
+//    return new_tree;
+//}
+//
+//rbtree_node *create_node(int val) {
+//    rbtree_node *new = malloc(sizeof(rbtree_node));
+//    new->left = NULL;
+//    new->right = NULL;
+//    new->parent = NULL;
+//    new->color = RED;
+//    new->val = val;
+//    return new;
+//}
+//
+//void insertToRBTree(tree *tree1, int val) {
+//    rbtree_node *t = create_node(val);
+//    rbtree_node *p = tree1->root;
+//    rbtree_node *q = p;
+//    while (p != NULL) {
+//        q = p;
+//        if (p->val < t->val)
+//            p = p->right;
+//        else
+//            p = p->left;
+//    }
+//
+//    t->parent = q;
+//    if (q->val < t->val) {
+//        q->right = t;
+//    } else {
+//        q->left = t;
+//    }
+//    fixInsertion(tree1, t);
+//}
+//
+//void fixInsertion(tree *tree1, rbtree_node *t) {
+//    while (t->parent != NULL && t->parent->color == RED) {
+//        if (grandparent(t) != NULL && grandparent(t)->left == t->parent) {
+//            if (uncle(t) != NULL && uncle(t)->color == RED) {
+//                t->parent->color = BLACK;
+//                uncle(t)->color = BLACK;
+//                grandparent(t)->color = RED;
+//                t = grandparent(t);
+//            } else {
+//                if (t->parent->right == t) {
+//                    t = t->parent;
+//                    rotate_left(tree1, t);
+//                }
+//                t->parent->color = BLACK;
+//                grandparent(t)->color = RED;
+//                rotate_right(tree1, grandparent(t));
+//            }
+//        } else {
+//            if (uncle(t) != NULL && uncle(t)->color == RED) {
+//                t->parent->color = BLACK;
+//                uncle(t)->color = BLACK;
+//                grandparent(t)->color = RED;
+//                t = grandparent(t);
+//            } else {
+//                if (t->parent->left == t) {
+//                    t = t->parent;
+//                    rotate_right(tree1, t);
+//                }
+//                t->parent->color = BLACK;
+//                grandparent(t)->color = RED;
+//                rotate_left(tree1, grandparent(t));
+//            }
+//        }
+//    }
+//    tree1->root->color = BLACK;
+//}
+//
+//void rotate_left(tree *tree1, rbtree_node *n) {
+//    rbtree_node *pivot = n->right;
+//
+//    pivot->parent = n->parent; /* при этом, возможно, pivot становится корнем дерева */
+//    if (n->parent != NULL) {
+//        if (n->parent->left == n)
+//            n->parent->left = pivot;
+//        else
+//            n->parent->right = pivot;
+//    }
+//
+//    n->right = pivot->left;
+//    if (pivot->left != NULL)
+//        pivot->left->parent = n;
+//
+//    n->parent = pivot;
+//    pivot->left = n;
+//    if (pivot->parent == NULL)
+//        tree1->root = pivot;
+//}
+//
+//void rotate_right(tree *tree1, rbtree_node *n) {
+//    rbtree_node *pivot = n->left;
+//
+//    pivot->parent = n->parent; /* при этом, возможно, pivot становится корнем дерева */
+//    if (n->parent != NULL) {
+//        if (n->parent->left == n)
+//            n->parent->left = pivot;
+//        else
+//            n->parent->right = pivot;
+//    }
+//
+//    n->left = pivot->right;
+//    if (pivot->right != NULL)
+//        pivot->right->parent = n;
+//
+//    n->parent = pivot;
+//    pivot->right = n;
+//    if (pivot->parent == NULL)
+//        tree1->root = pivot;
+//}
+//
+//bool is_leaf(rbtree_node *node1) {
+//    return (node1 == NULL);
+//}
+//
+//int leaf_count(rbtree_node *n) {
+//    if (n->left == NULL && n->right == NULL)
+//        return 0;
+//    if (n->left != NULL && n->right != NULL)
+//        return 2;
+//    return 1;
+//}
+//
+//void delete(tree *tree1, int val) {
+//    rbtree_node *p = tree1->root;
+//    rbtree_node *q = p;
+//    while (p->val != q->val) {
+//        q = p;
+//        if (p->val < val)
+//            p = p->right;
+//        else
+//            p = p->left;
+//    }
+//    p = q;
+//    if (p == NULL)
+//        return;
+//
+//    if (leaf_count(p) == 0) {
+//        if (p == tree1->root) {
+//            free(tree1->root);
+//            tree1->root = NULL;
+//        } else {
+//            if (p->parent->left == p)
+//                p->parent->left = NULL;
+//            else
+//                p->parent->right = NULL;
+//            free(p);
+//        }
+//        return;
+//    }
+//
+//    rbtree_node *y = NULL;
+//    if (leaf_count(p) == 1) {
+//
+//        y = ((p->left != NULL) ? p->left : p->right);
+//        if (p->parent->left == p)
+//            p->parent->left = y;
+//        else    /// This block is strange (NEED FIX)
+//            p->parent->right = y;
+//
+//    } else {
+//
+//        y = p->right;
+//        while (y->left != NULL)
+//            y = y->left;
+//
+//        if (y->right != NULL) {
+//            y->right->parent = y->parent;
+//        }
+//        if (y == tree1->root) {
+//            tree1->root = y->right;
+//        } else {
+//            if (y->parent->left == y)
+//                y->parent->left = y->right;
+//            else
+//                y->parent->right = y->right;
+//        }
+//        if (y != p) {
+//            p->color = y->color;
+//            p->val = y->val;
+//        }
+//        if (y->color == BLACK) {
+//            fixDeleting(tree1, q);
+//        }
+//
+//
+//    }
+//    free(y);
+//}
+//
+//rbtree_node *sibling(rbtree_node *n) {
+//    if (n == n->parent->left)
+//        return n->parent->right;
+//    else
+//        return n->parent->left;
+//}
+//
+//void fixDeleting(tree *tree1, rbtree_node *p) {
+//    while (p->color == BLACK && p != tree1->root) {
+//        rbtree_node *brother = sibling(p);
+//        if (p->parent->left == p) {
+//            if (brother->color == RED) {
+//                brother->color = BLACK;
+//                p->parent->color = RED;
+//                rotate_left(tree1, p->parent);
+//            }
+//            if (leaf_count(brother) == 2 && brother->left->color == BLACK && brother->right->color == BLACK) {
+//                brother->color = RED;
+//            } else {
+//                if (leaf_count(brother) == 2 && brother->right == BLACK) {
+//                    brother->left->color = BLACK;
+//                    brother->color = RED;
+//                    rotate_right(tree1, brother);
+//                }
+//                brother->color = p->parent->color;
+//                p->parent->color = BLACK;
+//                brother->right->color = BLACK;
+//                rotate_left(tree1, p->parent);
+//                p = tree1->root;
+//            }
+//        } else {
+//            if (brother->color == RED) {
+//                brother->color = BLACK;
+//                p->parent->color = RED;
+//                rotate_right(tree1, p->parent);
+//            }
+//            if (leaf_count(brother) == 2 && brother->left->color == BLACK && brother->right->color == BLACK) {
+//                brother->color = RED;
+//            } else {
+//                if (brother->left->color == BLACK) {
+//                    brother->right->color = BLACK;
+//                    brother->color = RED;
+//                    rotate_left(tree1, brother);
+//                }
+//                if (p->parent->left == p)
+//                    p->parent->right = p->parent;
+//                else
+//                    p->parent->left = p->parent;
+//                p->parent->color = BLACK;
+//                brother->left->color = BLACK;
+//                rotate_right(tree1, p->parent);
+//                p = tree1->root;
+//            }
+//        }
+//        p->color = BLACK;
+//        tree1->root->color = BLACK;
+//    }
+//}
+//
