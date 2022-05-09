@@ -79,7 +79,7 @@ typedef struct {
     bool end;
 } tree_iterator;
 
-void fillTreeIteratorStack__(tree_iterator *iterator, rbtree_node *from);
+void fillTreeIterator__(tree_iterator *iterator, rbtree_node *from);
 
 tree_iterator *createTreeIterator(tree *t, rbtree_node *from);
 
@@ -93,7 +93,7 @@ typedef struct {
     bool end;
 } reversed_tree_iterator;
 
-void fillReversedTreeIteratorStack__(reversed_tree_iterator *iterator, rbtree_node *from);
+void fillReversedTreeIterator__(reversed_tree_iterator *iterator, rbtree_node *from);
 
 reversed_tree_iterator *createReversedTreeIterator(tree *t, rbtree_node *from);
 
@@ -105,5 +105,6 @@ void printRBTree(tree *t);
 
 void deleteRBTree(tree *t);
 
+size_t leaf_count(rbtree_node *n);
 
 #endif //LAB_23_RBTREE_H

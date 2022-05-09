@@ -237,18 +237,18 @@ rbtree_node *findNode(tree *t, rbtree_val val) {
 }
 
 
-void fillTreeIteratorStack__(tree_iterator *iterator, rbtree_node *from) {
+void fillTreeIterator__(tree_iterator *iterator, rbtree_node *from) {
     if (from == NIL) return;
-    fillTreeIteratorStack__(iterator, from->left);
+    fillTreeIterator__(iterator, from->left);
     pushToQueue(iterator->q, from);
-    fillTreeIteratorStack__(iterator, from->right);
+    fillTreeIterator__(iterator, from->right);
 }
 
 tree_iterator *createTreeIterator(tree *t, rbtree_node *from) {
     tree_iterator *iterator = malloc(sizeof(tree_iterator));
     iterator->t = t;
     iterator->q = createQueue();
-    fillTreeIteratorStack__(iterator, from);
+    fillTreeIterator__(iterator, from);
     iterator->end = false;
     return iterator;
 }
@@ -266,18 +266,18 @@ rbtree_node *treeIteratorNext(tree_iterator *iterator) {
 }
 
 
-void fillReversedTreeIteratorStack__(reversed_tree_iterator *iterator, rbtree_node *from) {
+void fillReversedTreeIterator__(reversed_tree_iterator *iterator, rbtree_node *from) {
     if (from == NIL) return;
-    fillReversedTreeIteratorStack__(iterator, from->left);
+    fillReversedTreeIterator__(iterator, from->left);
     pushToStack(iterator->s, from);
-    fillReversedTreeIteratorStack__(iterator, from->right);
+    fillReversedTreeIterator__(iterator, from->right);
 }
 
 reversed_tree_iterator *createReversedTreeIterator(tree *t, rbtree_node *from) {
     reversed_tree_iterator *iterator = malloc(sizeof(reversed_tree_iterator));
     iterator->t = t;
     iterator->s = createStack();
-    fillReversedTreeIteratorStack__(iterator, t->root);
+    fillReversedTreeIterator__(iterator, t->root);
     return iterator;
 }
 
@@ -366,4 +366,13 @@ void print_root(rbtree_node *root) {
 
 void printRBTree(tree *t) {
     print_root(t->root);
+}
+
+
+size_t leaf_count(rbtree_node *n) {
+    if (n->left == NIL && n->right == NIL)
+        return 0;
+    if (n->left != NIL && n->right != NIL)
+        return 2;
+    return 1;
 }
