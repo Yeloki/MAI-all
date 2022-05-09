@@ -192,7 +192,7 @@ void deleteFixup(tree *t, rbtree_node *x) {
     x->color = BLACK;
 }
 
-void deleteTreeNode(tree *t, node_val val) {
+void deleteTreeNode(tree *t, rbtree_val val) {
     rbtree_node *z = findNode(t, val);
     if (z == NULL)
         throw(RBTREE_NODE_DOES_NOT_EXIST);
@@ -365,7 +365,10 @@ void print_root(rbtree_node *root) {
 }
 
 void printRBTree(tree *t) {
-    print_root(t->root);
+    if (t->root != NIL)
+        print_root(t->root);
+    else
+        printf("TREE IS EMPTY\n");
 }
 
 

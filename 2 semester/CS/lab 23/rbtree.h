@@ -21,19 +21,6 @@
 #define RBTREE_NODE_DOES_NOT_EXIST  \
   ((struct SxTraceEntry) {302, 0, __FILE__, __LINE__, "\0", NULL})
 
-typedef enum {
-    ZERO,
-    ONE,
-    TWO,
-    THREE,
-    FOUR,
-    FIVE,
-    SIX,
-    SEVEN,
-    EIGHT,
-    NINE,
-} node_val;
-
 
 typedef int rbtree_val;
 #define compLT(a, b) ((a) < (b))
@@ -69,7 +56,7 @@ rbtree_node *insertNode(tree *, rbtree_val val);
 
 void deleteFixup(tree *, rbtree_node *x);
 
-void deleteTreeNode(tree *t, node_val);
+void deleteTreeNode(tree *t, rbtree_val);
 
 rbtree_node *findNode(tree *, rbtree_val val);
 
