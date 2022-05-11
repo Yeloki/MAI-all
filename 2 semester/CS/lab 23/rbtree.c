@@ -315,11 +315,11 @@ void print_left_part(rbtree_node *root, int v, array *arr) {
         arrayPushBack(arrN, s[i]);
         arrayPushBack(arrO, s[i]);
     }
-    print_left_part(root->left, v + 1, arrN);
+    print_right_part(root->right, v + 1, arrO);
     for (int i = 0; i < arraySize(arr) - 8; ++i)
         printf("%c", arrayAt(arr, i));
-    printf(" /----->%d\n", root->val);
-    print_right_part(root->right, v + 1, arrO);
+    printf(" \\----->%d\n", root->val);
+    print_left_part(root->left, v + 1, arrN);
     arrayDestroy(arr);
 }
 
@@ -342,11 +342,11 @@ void print_right_part(rbtree_node *root, int v, array *arr) {
         arrayPushBack(arrN, s[i]);
         arrayPushBack(arrO, s[i]);
     }
-    print_left_part(root->left, v + 1, arrO);
+    print_right_part(root->right, v + 1, arrN);
     for (int i = 0; i < arraySize(arr) - 8; ++i)
         printf("%c", arrayAt(arr, i));
-    printf(" \\----->%d\n", root->val);
-    print_right_part(root->right, v + 1, arrN);
+    printf(" /----->%d\n", root->val);
+    print_left_part(root->left, v + 1, arrO);
     arrayDestroy(arr);
 }
 
@@ -359,9 +359,9 @@ void print_root(rbtree_node *root) {
         arrayPushBack(arrL, s[i]);
         arrayPushBack(arrR, s[i]);
     }
-    print_left_part(root->left, 0, arrL);
-    printf("%d\n", root->val);
     print_right_part(root->right, 0, arrR);
+    printf("%d\n", root->val);
+    print_left_part(root->left, 0, arrL);
 }
 
 void printRBTree(tree *t) {
