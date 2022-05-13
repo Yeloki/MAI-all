@@ -25,22 +25,31 @@ void help() {
            ));
 }
 
+bool isEqual(const char *s1, const char *s2) {
+    size_t i = 0;
+    while (s1[i] != '\0' && s2[i] != '\0') {
+        if (s1[i] != s2[i])
+            return false;
+        ++i;
+    }
+    return s1[i] == s2[i];
+}
 
 int main(int argc, char **argv) {
     tree *t = createTree();
     t->is_unique = false;
     int value;
     while (true) {
-        char command;
-        scanf("%c", &command);
-        if (command == 'h') {
+        char command[20];
+        scanf("%s", &command);
+        if (isEqual(command, "h")) {
             help();
-        } else if (command == 'a') {
+        } else if (isEqual(command, "a")) {
             scanf("%d", &value);
             insertNode(t, value);
-        } else if (command == 'p') {
+        } else if (isEqual(command, "p")) {
             printRBTree(t);
-        } else if (command == 'd') {
+        } else if (isEqual(command, "d")) {
             scanf("%d", &value);
             try {
                 deleteTreeNode(t, value);
@@ -48,9 +57,9 @@ int main(int argc, char **argv) {
                 printf("Node with value %d doesn't exists\n", value);
             }
             endtry
-        } else if (command == 's') {
+        } else if (isEqual(command, "s")) {
             solve(t);
-        } else if (command == 'q') {
+        } else if (isEqual(command, "q")) {
             break;
         } else
             printf("Wrong command, type \"help\" to get info\n");
