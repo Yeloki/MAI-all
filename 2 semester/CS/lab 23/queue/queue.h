@@ -16,7 +16,7 @@
 #define QUEUE_MEMORY_ALLOCATION_ERROR  \
   ((struct SxTraceEntry) {302, 0, __FILE__, __LINE__, "\0", NULL})
 
-typedef unsigned long long queue_val;
+typedef void* queue_val;
 
 typedef struct queue_node {
     struct queue_node *prev;

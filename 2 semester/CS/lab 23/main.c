@@ -1,4 +1,4 @@
-#include "rbtree.h"
+#include "rbtree/rbtree.h"
 #include "array/array.h"
 /// var 9
 
@@ -10,7 +10,7 @@ void solve(tree *t) {
         if (n->val == leaf_count(n))
             ans++;
     }
-    printf("The number of vertices whose value is the same as its own degree: %u\n", ans);
+    printf("The number of vertices whose value is the same as its own degree: %lu\n", ans);
 }
 
 void help() {
@@ -22,17 +22,27 @@ void help() {
                    "d <value> - delete ONE node with current value\n"
                    "s - call the \"solve\" function of variant 9\n"
                    "q - quit the program\n"
+                   "Possible values:\n"
+                   "ZERO, ONE, TWO, THREE, FOUR, FIVE\n"
+                   "SIX, SEVEN, EIGHT, NINE, TEN\n"
            ));
 }
 
-bool isEqual(const char *s1, const char *s2) {
-    size_t i = 0;
-    while (s1[i] != '\0' && s2[i] != '\0') {
-        if (s1[i] != s2[i])
-            return false;
-        ++i;
-    }
-    return s1[i] == s2[i];
+
+bool clear() {
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+    return c == EOF;
+}
+
+void print_possible_values() {
+    printf((
+                   "This value doesn't support, possible values:\n"
+                   "ZERO, ONE, TWO, THREE, FOUR, FIVE\n"
+                   "SIX, SEVEN, EIGHT, NINE, TEN\n"
+           ));
 }
 
 int main(int argc, char **argv) {
@@ -41,18 +51,30 @@ int main(int argc, char **argv) {
     int value;
     while (true) {
         char command[20];
-        scanf("%s", &command);
+        int code = scanf("%s", command);
+        if (code == EOF) return 0;
         if (isEqual(command, "h")) {
             help();
         } else if (isEqual(command, "a")) {
-            scanf("%d", &value);
-            insertNode(t, value);
+            try {
+                value = parse();
+                insertNode(t, value);
+            } catch(NOT_ERR_EOF__.code) {
+                return 0;
+            } catch(RBTREE_PARSE_ERROR.code) {
+                print_possible_values();
+            }
+            endtry
         } else if (isEqual(command, "p")) {
             printRBTree(t);
         } else if (isEqual(command, "d")) {
-            scanf("%d", &value);
             try {
+                value = parse();
                 deleteTreeNode(t, value);
+            } catch(NOT_ERR_EOF__.code) {
+                return 0;
+            } catch(RBTREE_PARSE_ERROR.code) {
+                print_possible_values();
             } catch(RBTREE_NODE_DOES_NOT_EXIST.code) {
                 printf("Node with value %d doesn't exists\n", value);
             }
@@ -62,10 +84,10 @@ int main(int argc, char **argv) {
         } else if (isEqual(command, "q")) {
             break;
         } else
-            printf("Wrong command, type \"help\" to get info\n");
-        fflush(stdin);
+            printf("Wrong command, type \"h\" to get info\n");
+        if (clear())
+            return 0;
     }
-
     deleteRBTree(t);
     return 0;
 }

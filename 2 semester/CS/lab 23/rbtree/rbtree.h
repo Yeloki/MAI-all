@@ -8,9 +8,9 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <stdbool.h>
-#include "stack/stack.h"
-#include "queue/queue.h"
-#include "exception/exception.h"
+#include "../stack/stack.h"
+#include "../queue/queue.h"
+#include "../exception/exception.h"
 
 #define RBTREE_IS_EMPTY  \
   ((struct SxTraceEntry) {300, 0, __FILE__, __LINE__, "\0", NULL})
@@ -20,9 +20,30 @@
   ((struct SxTraceEntry) {302, 0, __FILE__, __LINE__, "\0", NULL})
 #define RBTREE_NODE_DOES_NOT_EXIST  \
   ((struct SxTraceEntry) {302, 0, __FILE__, __LINE__, "\0", NULL})
+#define NOT_ERR_EOF__ \
+    ((struct SxTraceEntry) {310, 0, __FILE__, __LINE__, "\0", NULL})
+#define RBTREE_PARSE_ERROR \
+          ((struct SxTraceEntry) {320, 0, __FILE__, __LINE__, "\0", NULL})
+//typedef int rbtree_val;
 
+typedef enum {
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN
+} rbtree_val;
 
-typedef int rbtree_val;
+rbtree_val parse();
+
+void print_val(rbtree_val);
+
 #define compLT(a, b) ((a) < (b))
 #define compEQ(a, b) ((a) == (b))
 
@@ -93,5 +114,7 @@ void printRBTree(tree *t);
 void deleteRBTree(tree *t);
 
 size_t leaf_count(rbtree_node *n);
+
+bool isEqual(const char *s1, const char *s2);
 
 #endif //LAB_23_RBTREE_H

@@ -5,7 +5,7 @@
 #include "rbtree.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "array/array.h"
+#include "../array/array.h"
 
 #define NIL &sentinel
 rbtree_node sentinel = {NIL, NIL, 0, BLACK, 0};
@@ -318,7 +318,9 @@ void print_left_part(rbtree_node *root, int v, array *arr) {
     print_right_part(root->right, v + 1, arrO);
     for (int i = 0; i < arraySize(arr) - 8; ++i)
         printf("%c", arrayAt(arr, i));
-    printf(" \\----->%d\n", root->val);
+    printf(" \\----->");
+    print_val(root->val);
+    printf("\n");
     print_left_part(root->left, v + 1, arrN);
     arrayDestroy(arr);
 }
@@ -345,7 +347,9 @@ void print_right_part(rbtree_node *root, int v, array *arr) {
     print_right_part(root->right, v + 1, arrN);
     for (int i = 0; i < arraySize(arr) - 8; ++i)
         printf("%c", arrayAt(arr, i));
-    printf(" /----->%d\n", root->val);
+    printf(" /----->");
+    print_val(root->val);
+    printf("\n");
     print_left_part(root->left, v + 1, arrO);
     arrayDestroy(arr);
 }
@@ -360,7 +364,8 @@ void print_root(rbtree_node *root) {
         arrayPushBack(arrR, s[i]);
     }
     print_right_part(root->right, 0, arrR);
-    printf("%d\n", root->val);
+    print_val(root->val);
+    printf("\n");
     print_left_part(root->left, 0, arrL);
 }
 
@@ -378,4 +383,85 @@ size_t leaf_count(rbtree_node *n) {
     if (n->left != NIL && n->right != NIL)
         return 2;
     return 1;
+}
+
+
+rbtree_val parse() {
+    char s[8];
+    int code = scanf("%s", s);
+    if (code == EOF)
+        throw(NOT_ERR_EOF__);
+    if (isEqual(s, "ZERO"))
+        return ZERO;
+    else if (isEqual(s, "ONE"))
+        return ONE;
+    else if (isEqual(s, "TWO"))
+        return TWO;
+    else if (isEqual(s, "THREE"))
+        return THREE;
+    else if (isEqual(s, "FOUR"))
+        return FOUR;
+    else if (isEqual(s, "FIVE"))
+        return FIVE;
+    else if (isEqual(s, "SIX"))
+        return SIX;
+    else if (isEqual(s, "SEVEN"))
+        return SEVEN;
+    else if (isEqual(s, "EIGHT"))
+        return EIGHT;
+    else if (isEqual(s, "NINE"))
+        return NINE;
+    else if (isEqual(s, "TEN"))
+        return TEN;
+    else
+        throw(RBTREE_PARSE_ERROR);
+}
+
+void print_val(rbtree_val v) {
+    switch (v) {
+        case ZERO:
+            printf("ZERO");
+            break;
+        case ONE:
+            printf("ONE");
+            break;
+        case TWO:
+            printf("TWO");
+            break;
+        case THREE:
+            printf("THREE");
+            break;
+        case FOUR:
+            printf("FOUR");
+            break;
+        case FIVE:
+            printf("FIVE");
+            break;
+        case SIX:
+            printf("SIX");
+            break;
+        case SEVEN:
+            printf("SEVEN");
+            break;
+        case EIGHT:
+            printf("EIGHT");
+            break;
+        case NINE:
+            printf("NINE");
+            break;
+        case TEN:
+            printf("TEN");
+            break;
+
+    }
+}
+
+bool isEqual(const char *s1, const char *s2) {
+    size_t i = 0;
+    while (s1[i] != '\0' && s2[i] != '\0') {
+        if (s1[i] != s2[i])
+            return false;
+        ++i;
+    }
+    return s1[i] == s2[i];
 }

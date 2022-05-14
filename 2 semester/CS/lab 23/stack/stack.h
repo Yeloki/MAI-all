@@ -16,7 +16,7 @@
 #define STACK_MEMORY_ALLOCATION_ERROR  \
   ((struct SxTraceEntry) {305, 0, __FILE__, __LINE__, "\0", NULL})
 
-typedef unsigned long long stack_val;
+typedef void* stack_val;
 
 typedef struct stack_node {
     struct stack_node *prev;
