@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[T2A]{fontenc}
+\usepackage[a5paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+\usepackage{fancyhdr}
+\usepackage{amsthm}
+\usepackage{breqn}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{amssymb}
+\usepackage{geometry}
+
+\geometry{verbose,a5paper,tmargin=2cm,lmargin=2.5cm,rmargin=2.5cm}
+\linespread{0.9}
+\setcounter{page}{231}
+\cfoot{\overline{\quad\quad\textsl{\thepage}\quad\quad}}
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+
+
+
+\begin{document}
+\noindent Поэтому
+\begin{equation} \tag{6.20}
+    \lim_{k\to \infty} x_n_k'=f(x_0).
+\end{equation}
+Из (6.19) и (6.20) следует, что
+
+\begin{equation} \notag
+    \lim_{k\to \infty} [f(x_n_k')-f(x_n_k)] = f(x_0) - f(x_0) = 0,
+\end{equation}
+а это противоречит условию, что при всех \(k=1, 2, ...\ \) выполняется неравенство
+
+\begin{equation} \notag
+    |f(x_n_k')-f(x_n_k)| \underset{(6.17)} \geqslant  \epsilon_0 > 0.
+\end{equation}
+Полученое противоречие доказывет теорему. \qedsymbol
+\par Условие равномерной непрырывности можно сформулировать в терминах так называемях колебаний функции на отрезках.\\
+\textsf{\textbf{\small{О п р е д е л е н и е 4.}}} \textit{Пусть  функция  $f$  задана на отрезке} [$a, b$]\textit{. Тогда величина}
+\begin{equation} \tag {6.21}
+    \omega(f; [a, b]) = \underset{x, x' \in [a, b]} \sup |f(x') - f(x)|
+\end{equation}
+\textit{называется колебанием функции f на отрезке} [\textit{a, b}].
+\par Из двух значений $f(x') - f(x)$ и $f(x) - f(x')$ одно заведомо неотрицательно и, следовательно, не меньше второго, поэтому величина верхней грани в правой части равенства (6.21) не изменится, если вместо абсолютной величины |f(x') - f(x)| разности $f(x') - f(x)$ поставить саму эту разность:
+\begin{equation}
+    \omega(f; [a,b]) = \underset{x, x' \in [a,b]}\sup [f(x') - f(x)]
+\end{equation}
+Справедливо следующее утверждение.
+\par Для того, чтобы функция $f$ была равномерно непрырывна на отрезке [$a,b$], необходимо и достаточно, чтобы для любого $\epsilon > 0$ существовало такое $\delta > 0$, что каков бы ни был отрезок [$x, x'$] $\subset$ [$a,b$] длины меньшей $\epsilon: 0 < x' - x < \epsilon$, выполнялось неравенство
+\begin{equation} \tag{6.22}
+    \omega(f;[x,x']) < \epsilon.
+\end{equation}
+
+\parДействительно, поскольку $x, x' \in [x, x']$, из неравенсвта (6.22) следует, что $|f(x') - f(x)| < \epsilon$, поэтому выполняется утверждение (6.15).
+\parОбратно, если справедливо утверждение (6.15), то для люого $\epsilon > 0$ найдется такое $\delta > 0$, что для любых двух точек $x$ и $x'$ отрезка [$a,b$], удовлетворяющих условию $|x' - x| < \delta$, имеет место неравенство $|f(x') - f(x)| < \epsilon / 2$.
+
+\par Пусть для определенности $x < x'$. Для любых двух точек $\xi$ и $\eta$ отрезка [$x,x'$], очевидно, выполняется неравенсвто $0<|\eta - \xi| < x' - x < \delta$, следовательно, и неравенсвто $|f(\eta) - f(\xi)| < \epsilon / 2$. Поэтому для любого отрезка [$x,x'$] такого, что $0 < x' - x < \delta$ имеем
+\begin{equation} \notag
+    \omega(f;[x,x']) = \underset{\xi,\eta \in [x, x']} \sup |f(\eta) - f(\xi)| \leq \epsilon/2 < \epsilon. \qedsymbol
+\end{equation}
+\par Часто оказывается удобным ещё один подход к понятию равномерной непрырывности, а именно подход, связанный с понятием модуля непрырывности функции.
+\textsf{\textbf{\small{О п р е д е л е н и е 5.}}} \textit{Модулем непрырывности $\omega(\delta;f)$ функции $f$, определенной на отрезке $[a,b]$, называется функция}
+\begin{equation} \tag {6.23}
+    \omega(\delta;f) = \underset{|x''-x'| \leq \delta} \sup |f(x''-f(x')|, x', x'' \in [a,b].
+\end{equation}
+\par Иногда для краткости вместо $\omega(\delta;f)$ будем писать просто $\omega(\delta)$. Как и в случае определения колебания функции (6.21), под знаком верхней грани в правой части равенсвта (6.23) можно не писать знак абсолтной величины разности $|f(x'') - f(x')|$, а брать саму разность - щначение верхней грани при этом не изменится:
+\begin{equation} \notag
+    \omega(\delta;f) = \underset{|x''-x'| \leq \delta} \sup [f(x''-f(x')], x', x'' \in [a,b].
+\end{equation}
+
+\par Очевидно, что $\oemga(\delta) \geqslant 0$. Далее, если $0 < \delta_1 < \delta_2$, то
+\begin{multline} \notag
+    {y: y = f(x'') - f(x'), |x'' - x'| \leq \delta_1} \subset\\ {y: y = f(x'') - f(x'), |x'' - x'| \leq \delta_2},
+\end{multline}
+откуда
+\begin{equation} \notag
+    \underset{|x''-x'|\leq\delta_1}\sup[f(x'') - f(x')] \leq \underset{|x''-x'|\leq\delta_2}\sup [f(x'')-f(x')], x', x'' \in [a,b],
+\end{equation}
+т.е. $\omega(\delta_1) \leq \omega(\delta_2)$. Это означает, что модуль непрырывности является возрастающей функцией.
+\par \textsf{\textbf{\small{П р и м е р ы. 1.}}} Найдем $\omega(\delta)$ для функции $y = x^2, -\infty < x < +\infty$.
+\par Для любого $\delta > 0$ и произвольного фиксированнго $x_0$ имеем
+
+\begin{equation} \tag {6.24}
+    \omega(\delta;x^2) = \underset{|x'' - x'| \leq \delta} \sup (x''^2 - x'^2) \geqslant x_0^2 - (x_0 - \delta)^2 = 2x_0\delta - \delta^2
+\end{equation}
+
+\end{document}
+
