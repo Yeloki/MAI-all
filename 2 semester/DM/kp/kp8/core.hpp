@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cmath>
 #include <thread>
+#include "thread_pool.hpp"
 #include "debug.hpp"
 
 namespace core {
@@ -60,8 +61,8 @@ namespace core {
 
   path operator*(const path &a, const path &b) {
     path res(a.getMaxSize());
-    for (int node: a.get())
-      res.add(node);
+    for (int i(0); i < a.get().size(); ++i)
+      res.add(a.get()[i]);
     for (int i(1); i < b.get().size(); ++i)
       res.add(b.get()[i]);
     return res;
@@ -173,22 +174,41 @@ namespace core {
       return data[c.row][c.col];
     }
 
-    std::vector<path> operator[](const coord &c) const {
+    const std::vector<path> &operator[](const coord &c) const {
       return data[c.row][c.col];
     }
   };
 
+  void multiplicationSolver(matrix *res, matrix *A, matrix *B, int colA, int rowB, int index) {
+
+  }
 
   matrix operator*(const matrix &A, const matrix &B) {
     matrix res;
     res.resize(A.size());
-    for (int colA(0); colA < res.size(); ++colA)
-      for (int rowB(0); rowB < res.size(); ++rowB)
-        for (int index(0); index < res.size(); ++index)
-          for (path &p_l: A[{colA, index}])
-            for (path &p_r: B[{index, rowB}])
-              if ((p_l * p_r).is_valid())
-                res[{colA, rowB}].push_back(p_l * p_r);
+    thread_pool pool(16);
+    std::vector<std::future<std::pair<std::vector<path>, coord>>> v;
+    for (int colA(0); colA < res.size(); ++colA) {
+      for (int rowB(0); rowB < res.size(); ++rowB) {
+        v.push_back(pool.submit([&, colA, rowB]() {
+          std::vector<path> ans;
+          for (int index(0); index < res.size(); ++index)
+            for (const path &p_l: A[{colA, index}])
+              for (const path &p_r: B[{index, rowB}]) {
+                auto p = p_l * p_r;
+                if (p.is_valid()) {
+                  ans.push_back(p);
+                }
+              }
+          return std::pair<std::vector<path>, coord>(ans, {colA, rowB});
+        }));
+      }
+    }
+    pool.wait_for_tasks();
+    for (auto &c: v) {
+      auto data = c.get();
+      res[data.second] = data.first;
+    }
     return res;
   }
 
@@ -216,8 +236,8 @@ namespace core {
     auto A = generateMatrix(g);
     auto B = generateMatrix(g);
     for (int i(1); i < g.adjacencyTableSize(); ++i) {
-      logger::logInfo("Multiplication step " + std::to_string(i) + " was completed");
       A = A * B;
+      logger::logInfo("Multiplication step " + std::to_string(i) + " was completed");
     }
     write_res(A);
     logger::logInfo("Successfully solved");
