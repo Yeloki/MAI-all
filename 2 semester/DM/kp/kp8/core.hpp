@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-#include <thread>
 #include "thread_pool.hpp"
 #include "debug.hpp"
 
@@ -179,9 +178,6 @@ namespace core {
     }
   };
 
-  void multiplicationSolver(matrix *res, matrix *A, matrix *B, int colA, int rowB, int index) {
-
-  }
 
   matrix operator*(const matrix &A, const matrix &B) {
     matrix res;
@@ -230,6 +226,8 @@ namespace core {
   }
 
   void solve(const graph &g) {
+    timer t;
+    t.start();
     /// This function finds all the contours of
     /// a given directed graph using the Latin composition method
     /// \param g - graph for Latin composition method
@@ -240,6 +238,8 @@ namespace core {
       logger::logInfo("Multiplication step " + std::to_string(i) + " was completed");
     }
     write_res(A);
+    t.stop();
     logger::logInfo("Successfully solved");
+    logger::logInfo("Time spent: " + std::to_string(t.ms() / 1000.0) + "s");
   }
 } // end namespace core
